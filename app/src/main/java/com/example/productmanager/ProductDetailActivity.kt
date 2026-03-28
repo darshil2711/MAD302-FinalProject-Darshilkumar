@@ -1,0 +1,60 @@
+package com.example.productmanager
+
+/**
+ * Displays full details for a single product.
+ * Receives product data via Intent and provides
+ * Edit and Delete action buttons.
+ */
+class ProductDetailActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_product_detail)
+        title = "Product Details"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true) // Back button
+
+        // Retrieve product passed from MainActivity
+        val product = intent.getSerializableExtra("product") as Product
+
+        // Populate UI fields
+        findViewById<TextView>(R.id.tvDetailName).text = product.name
+        findViewById<TextView>(R.id.tvDetailPrice).text =
+            "$${String.format("%.2f", product.price)}"
+        findViewById<TextView>(R.id.tvDetailDescription).text = product.description
+
+        // Open edit form with this product pre-loaded
+        findViewById<Button>(R.id.btnEdit).setOnClickListener {
+            val intent = Intent(this, AddEditProductActivity::class.java)
+            intent.putExtra("product", product)
+            startActivity(intent)
+        }
+
+        // Show confirmation dialog before deleting
+        findViewById<Button>(R.id.btnDelete).setOnClickListener {
+            showDeleteConfirmation(product)
+        }
+    }
+
+    /**
+     * Shows an AlertDialog asking the user to confirm product deletion.
+     * @param product The product to be deleted upon confirmation.
+     */
+    private fun showDeleteConfirmation(product: Product) {
+        AlertDialog.Builder(this)
+            .setTitle("Delete Product")
+            .setMessage("Are you sure you want to delete '${product.name}'?")
+            .setPositiveButton("Delete") { _, _ ->
+                // Return to list (in full implementation, remove from data source)
+                Toast.makeText(this, "${product.name} deleted", Toast.LENGTH_SHORT).show()
+                finish()
+            }
+            .setNegativeButton("Cancel", null) // Dismiss dialog
+            .show()
+    }
+
+    /** Handles the Up/Back navigation button in the action bar. */
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return true
+    }
+}
