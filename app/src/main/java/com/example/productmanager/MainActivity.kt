@@ -1,14 +1,3 @@
-package com.example.productmanager
-
-import android.content.Intent
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.example.productmanager.Product
-import kotlin.jvm.java
-
 /**
  * Course: MAD302-01 Android Development — Final Project
  * Student Name: Darshilkumar Karkar
@@ -17,39 +6,51 @@ import kotlin.jvm.java
  * Description: Main screen showing all products in a RecyclerView.
  *              Handles navigation to Add and Detail screens.
  */
+package com.example.productmanager
+
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+
 /**
- * Main screen showing all products in a RecyclerView.
- * Handles navigation to Add and Detail screens.
+ * The entry point of the app. It manages the product list and 
+ * handles the core navigation flow.
  */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var adapter: ProductAdapter
-    // Sample data — in a real app this would come from a database
-    private val products = mutableListOf(
-        Product(1, "Laptop", 999.99, "High-performance laptop"),
-        Product(2, "Phone", 599.99, "Latest smartphone"),
-        Product(3, "Headphones", 149.99, "Noise-cancelling headphones")
-    )
+    
+    // We now use the shared repository instead of a local list
+    private val products = ProductRepository.getAllProducts()
 
     /**
-     * Shows or hides the empty-state message depending on list size.
+     * Toggles between the list and the "no data" message so the user 
+     * isn't staring at a blank screen if the inventory is empty.
      */
     private fun updateEmptyState() {
-        val tvEmpty = findViewById<TextView>(R.id.tvEmpty)
+        val emptyStateContainer = findViewById<View>(R.id.tvEmpty)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        
         if (products.isEmpty()) {
-            tvEmpty.visibility = View.VISIBLE
+            emptyStateContainer.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
         } else {
-            tvEmpty.visibility = View.GONE
+            emptyStateContainer.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
         }
     }
 
-    // Call updateEmptyState() at end of onCreate()
-// and override onResume to refresh after returning from Add/Edit
+    /** 
+     * We refresh here to ensure any changes made in the Add/Edit 
+     * activities are immediately visible when the user hits 'Back'.
+     */
     override fun onResume() {
         super.onResume()
+        // Force the adapter to refresh with the latest data from the repo
         adapter.notifyDataSetChanged()
         updateEmptyState()
     }
@@ -59,21 +60,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         title = "Product Manager"
 
-        // Set up RecyclerView with LinearLayoutManager
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         adapter = ProductAdapter(products) { product ->
-            // Open detail screen, pass product via Intent
+            // Pass the selected product object to the detail screen
             val intent = Intent(this, ProductDetailActivity::class.java)
             intent.putExtra("product", product)
             startActivity(intent)
         }
         recyclerView.adapter = adapter
 
-        // FAB opens Add Product form
-        findViewById<FloatingActionButton>(R.id.fabAdd).setOnClickListener {
+        findViewById<ExtendedFloatingActionButton>(R.id.fabAdd).setOnClickListener {
             startActivity(Intent(this, AddEditProductActivity::class.java))
         }
+
+        updateEmptyState()
     }
 }

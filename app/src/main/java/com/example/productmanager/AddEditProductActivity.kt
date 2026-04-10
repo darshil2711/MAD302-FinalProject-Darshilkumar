@@ -14,10 +14,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
-/**
- * Activity for adding or editing product details.
- * It validates inputs and simulates saving data.
- */
 class AddEditProductActivity : AppCompatActivity() {
 
     private var existingProduct: Product? = null
@@ -25,6 +21,7 @@ class AddEditProductActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_edit_product)
+        
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val etName = findViewById<EditText>(R.id.etName)
@@ -32,7 +29,6 @@ class AddEditProductActivity : AppCompatActivity() {
         val etDescription = findViewById<EditText>(R.id.etDescription)
         val btnSave = findViewById<Button>(R.id.btnSave)
 
-        // Retrieve product if we're in Edit mode
         existingProduct = intent.getSerializableExtra("product") as? Product
 
         if (existingProduct != null) {
@@ -45,36 +41,41 @@ class AddEditProductActivity : AppCompatActivity() {
         }
 
         btnSave.setOnClickListener {
-            saveProduct(etName.text.toString(), etPrice.text.toString(), etDescription.text.toString())
+            val name = etName.text.toString().trim()
+            val priceText = etPrice.text.toString().trim()
+            val description = etDescription.text.toString().trim()
+            
+            saveProduct(name, priceText, description)
         }
     }
 
-    /**
-     * Validates and saves the product data.
-     *
-     * @param name The name of the product.
-     * @param priceText The price of the product as a string.
-     * @param description The description of the product.
-     */
     private fun saveProduct(name: String, priceText: String, description: String) {
-        val trimmedName = name.trim()
-        val trimmedPrice = priceText.trim()
-        val trimmedDescription = description.trim()
-
-        if (trimmedName.isEmpty() || trimmedPrice.isEmpty() || trimmedDescription.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+        if (name.isEmpty() || priceText.isEmpty() || description.isEmpty()) {
+            Toast.makeText(this, "All fields are required!", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val price = trimmedPrice.toDoubleOrNull()
+        val price = priceText.toDoubleOrNull()
         if (price == null || price <= 0) {
             Toast.makeText(this, "Please enter a valid price", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // In a real app, save to database here.
-        val resultMessage = if (existingProduct == null) "Product added" else "Product updated"
-        Toast.makeText(this, resultMessage, Toast.LENGTH_SHORT).show()
+        if (existingProduct == null) {
+            // Generate a simple unique ID and add to our shared repository
+            val newId = (ProductRepository.getAllProducts().maxOfOrNull { it.id } ?: 0) + 1
+            val newProduct = Product(newId, name, price, description)
+            ProductRepository.addProduct(newProduct)
+            Toast.makeText(this, "Product added successfully!", Toast.LENGTH_SHORT).show()
+        } else {
+            // Update the existing product in the repo
+            existingProduct!!.name = name
+            existingProduct!!.price = price
+            existingProduct!!.description = description
+            ProductRepository.updateProduct(existingProduct!!)
+            Toast.makeText(this, "Changes saved!", Toast.LENGTH_SHORT).show()
+        }
+        
         finish()
     }
 

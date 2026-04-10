@@ -11,16 +11,13 @@ package com.example.productmanager
 import java.io.Serializable
 
 /**
- * Data class representing a product in the inventory.
- *
- * @param id Unique identifier for the product.
- * @param name Display name of the product.
- * @param price Price of the product in dollars.
- * @param description A short description of the product.
+ * Data class for our products. 
+ * We implement Serializable so we can easily pass product objects between 
+ * activities using Intents.
  */
 data class Product(
     val id: Int,
     var name: String,
     var price: Double,
     var description: String
-) : Serializable // Allows passing via Intent
+) : Serializable

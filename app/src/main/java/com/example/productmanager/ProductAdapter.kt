@@ -12,13 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.productmanager.Product
 
 /**
- * RecyclerView adapter for displaying the list of products.
- *
- * @param products Mutable list of Product objects to display.
- * @param onClick Lambda called when a product card is tapped.
+ * Adapter class to bridge our product list data with the RecyclerView UI.
  */
 class ProductAdapter(
     private val products: MutableList<Product>,
@@ -26,38 +22,38 @@ class ProductAdapter(
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     /**
-     * ViewHolder holding references to item views.
-     * @param view The inflated CardView item layout.
+     * ViewHolder acts as a container for each item in the list.
+     * It keeps references to the views so we don't have to call findViewById repeatedly.
      */
     inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = view.findViewById(R.id.tvProductName)
         val tvPrice: TextView = view.findViewById(R.id.tvProductPrice)
+        val tvDescription: TextView = view.findViewById(R.id.tvProductDescriptionShort)
     }
 
-    /**
-     * Inflates the item layout and creates a new ViewHolder.
-     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+        // Inflate the custom card layout we designed for each product
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_product, parent, false)
         return ProductViewHolder(view)
     }
 
-    /** Binds product data to the ViewHolder views. */
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = products[position]
+        
+        // Setting up the data for this specific row
         holder.tvName.text = product.name
         holder.tvPrice.text = "$${String.format("%.2f", product.price)}"
-        // Navigate to detail on click
+        holder.tvDescription.text = product.description
+        
+        // Send the product back to the activity when the card is clicked
         holder.itemView.setOnClickListener { onClick(product) }
     }
 
-    /** Returns the total number of products in the list. */
     override fun getItemCount() = products.size
 
     /**
-     * Removes a product at the given position and refreshes the list.
-     * @param position Index of the product to remove.
+     * Helper method to remove a product and update the UI accordingly.
      */
     fun removeAt(position: Int) {
         products.removeAt(position)
