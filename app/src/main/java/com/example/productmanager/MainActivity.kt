@@ -10,12 +10,16 @@ import com.example.productmanager.Product
 import kotlin.jvm.java
 
 /**
- * Course: MAD302-01 — Final Project
- *Student Name: Darshilkumar Karkar
- *Student ID: A00203357
- *Submission Date: April 22, 2026
+ * Course: MAD302-01 Android Development — Final Project
+ * Student Name: Darshilkumar Karkar
+ * Student ID: A00203357
+ * Date: 22 April 2026.
  * Description: Main screen showing all products in a RecyclerView.
  *              Handles navigation to Add and Detail screens.
+ */
+/**
+ * Main screen showing all products in a RecyclerView.
+ * Handles navigation to Add and Detail screens.
  */
 class MainActivity : AppCompatActivity() {
 

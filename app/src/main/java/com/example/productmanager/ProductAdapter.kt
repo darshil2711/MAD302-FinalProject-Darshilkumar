@@ -1,3 +1,10 @@
+/**
+ * Course: MAD302-01 Android Development — Final Project
+ * Student Name: Darshilkumar Karkar
+ * Student ID: A00203357
+ * Date: 22 April 2026.
+ * Description: RecyclerView adapter for displaying the list of products.
+ */
 package com.example.productmanager
 
 import android.view.LayoutInflater
@@ -5,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.mad302.productmanager.Product
+import com.example.productmanager.Product
 
 /**
  * RecyclerView adapter for displaying the list of products.
@@ -27,6 +34,9 @@ class ProductAdapter(
         val tvPrice: TextView = view.findViewById(R.id.tvProductPrice)
     }
 
+    /**
+     * Inflates the item layout and creates a new ViewHolder.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_product, parent, false)
@@ -42,6 +52,7 @@ class ProductAdapter(
         holder.itemView.setOnClickListener { onClick(product) }
     }
 
+    /** Returns the total number of products in the list. */
     override fun getItemCount() = products.size
 
     /**

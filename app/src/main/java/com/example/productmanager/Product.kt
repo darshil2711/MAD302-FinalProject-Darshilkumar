@@ -1,8 +1,8 @@
 /**
  * Course: MAD302-01 Android Development — Final Project
- *Student Name: Darshilkumar Karkar
- *Student ID: A00203357
- *Submission Date: April 22, 2026,
+ * Student Name: Darshilkumar Karkar
+ * Student ID: A00203357
+ * Date: 22 April 2026.
  * Description: Data model representing a Product in the inventory system.
  */
 
