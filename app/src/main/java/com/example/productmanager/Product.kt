@@ -6,7 +6,7 @@
  * Description: Data model representing a Product in the inventory system.
  */
 
-package com.mad302.productmanager
+package com.example.productmanager
 
 import java.io.Serializable
 
