@@ -27,6 +27,29 @@ class MainActivity : AppCompatActivity() {
         Product(3, "Headphones", 149.99, "Noise-cancelling headphones")
     )
 
+    /**
+     * Shows or hides the empty-state message depending on list size.
+     */
+    private fun updateEmptyState() {
+        val tvEmpty = findViewById<TextView>(R.id.tvEmpty)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        if (products.isEmpty()) {
+            tvEmpty.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            tvEmpty.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
+    }
+
+    // Call updateEmptyState() at end of onCreate()
+// and override onResume to refresh after returning from Add/Edit
+    override fun onResume() {
+        super.onResume()
+        adapter.notifyDataSetChanged()
+        updateEmptyState()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
