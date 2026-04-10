@@ -1,5 +1,13 @@
 package com.example.productmanager
 
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+
 /**
  * Displays full details for a single product.
  * Receives product data via Intent and provides

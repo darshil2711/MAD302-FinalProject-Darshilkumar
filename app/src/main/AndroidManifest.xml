@@ -11,20 +11,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Productmanager">
-        <activity
-            android:name=".ProductDetailActivity"
-            android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProductDetailActivity"
+
+        <activity
+            android:name=".ProductDetailActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
+
+        <activity
+            android:name=".AddEditProductActivity"
+            android:parentActivityName=".MainActivity" />
+
+
     </application>
 
 </manifest>
