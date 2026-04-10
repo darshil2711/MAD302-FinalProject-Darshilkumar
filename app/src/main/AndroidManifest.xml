@@ -28,8 +28,8 @@
 
         <activity
             android:name=".AddEditProductActivity"
+            android:exported="false"
             android:parentActivityName=".MainActivity" />
-
 
     </application>
 
