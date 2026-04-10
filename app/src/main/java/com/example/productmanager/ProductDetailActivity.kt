@@ -1,3 +1,11 @@
+/**
+ * Course: MAD302-01 Android Development — Final Project
+ * Student Name: Darshilkumar Karkar
+ * Student ID: A00203357
+ * Date: 22 April 2026.
+ * Description: Displays full details for a single product.
+ *              Receives product data via Intent and provides Edit and Delete action buttons.
+ */
 package com.example.productmanager
 
 import android.content.Intent
